@@ -34,7 +34,7 @@ pipeline {
                         
                         // sh "docker run go-test-image"
 
-                        //TODO: Lo de arriba los test petan y creo que es por el mongo ya que el test singup no funciona, se qeuda esperando
+                        //TODO: Lo de arriba los test petan y creo que es por el mongo ya que el test singup no funciona, se qeuda esperando? aunque en local tmb petan.
                         //Y lo de abajo no da error pero me parece raro que no muestre una salida de los test
 
                         def dockerfile = 'Dockerfile.test'

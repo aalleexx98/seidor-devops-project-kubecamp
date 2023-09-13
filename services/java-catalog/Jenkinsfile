@@ -1,10 +1,27 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'DOCKER_TAG', description: 'Tag de la imagen Docker', defaultValue: 'latest')
+    }
+    environment {
+        DOCKER_USER_CRED = credentials('alex-joaquin-dockerhub')
+    }
     
     stages {
-        stage('Saludo') {
+        stage('Checkout') {
             steps {
-                echo 'Hola, mundo java 2'
+                checkout scm
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'sonarqube_5.0'
+                    withSonarQubeEnv(installationName: 'aroldev sonarqube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=alex-project-kubecamp-java -Dsonar.sources=./services/java-catalog -Dsonar.exclusions=**/*Test.java -Dsonar.tests=./services/java-catalog -Dsonar.test.inclusions=**/*Test.java"
+                    }
+                }
             }
         }
     }
