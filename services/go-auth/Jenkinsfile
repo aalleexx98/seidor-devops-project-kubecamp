@@ -77,14 +77,13 @@ pipeline {
             }
         }
 
-        stage('Cleanup') {
-            steps {
-                script {
-                    // Detener y eliminar el contenedor de prueba
-                    testContainer.stop()
-                    testContainer.remove()
-                }
+     }
+
+    post {
+        always {
+            script { 
+                testContainer.stop()
             }
         }
-     }
+    }
 }
