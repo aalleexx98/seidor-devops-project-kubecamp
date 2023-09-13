@@ -30,7 +30,7 @@ pipeline {
                 dir('services/go-auth'){
                     script {
                         def dockerfile = 'Dockerfile.test'
-                        testImage = docker.build("${params.DOCKER_IMAGE}:test", "-f ${dockerfileTest} .")
+                        testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
 
                         def testContainer = testImage.run()
 
