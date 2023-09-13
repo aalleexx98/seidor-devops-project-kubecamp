@@ -68,7 +68,6 @@ services:
     environment:
       MONGODB_HOST: db-progress-mongo
       MONGODB_PORT: "27017"
-      #MONGODB_DATABASE: mydatabase
     depends_on:
       - db-progress-mongo
       - go-auth
