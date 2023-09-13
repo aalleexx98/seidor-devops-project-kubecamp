@@ -40,9 +40,10 @@ pipeline {
                         def dockerfile = 'Dockerfile.test'
                         testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
                         testContainer.run()
-                        testContainer.inside {
-                            sh "go test -v ./..."
-                        }
+                        // testContainer.inside {
+                        //     sh "go test -v ./..."
+                        // }
+                        //Esto me da permision denied
                     }
                 }
             }
