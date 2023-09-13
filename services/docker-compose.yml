@@ -67,7 +67,8 @@ services:
       - 9000:9000
     environment:
       MONGODB_HOST: db-progress-mongo
-      MONGODB_PORT: 27017
+      MONGODB_PORT: "27017"
+      #MONGODB_DATABASE: mydatabase
     depends_on:
       - db-progress-mongo
       - go-auth
@@ -86,10 +87,10 @@ services:
   python-discuss:
     build:
       context: ./python-discuss
-      dockerfile: ./dev.Dockerfile
+      dockerfile: ./Dockerfile
     restart: unless-stopped
-    volumes:
-      - ./python-discuss:/app
+    # volumes:
+    #   - ./python-discuss:/app
     ports:
       - 8083:8083
     environment:

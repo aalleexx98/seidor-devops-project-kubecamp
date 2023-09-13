@@ -13,14 +13,21 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 WORKDIR /var/www/html
 
-COPY . .
+COPY composer.json composer.lock* ./
 
 RUN composer install --no-dev
 
-#TODO: Probar de poner sin fpm y poner alpine directamente.
 FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache libpq
+RUN apk add libpq\ 
+    autoconf \
+    g++ \ 
+    make \
+    unzip \
+    git
+
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 WORKDIR /var/www/html
 
