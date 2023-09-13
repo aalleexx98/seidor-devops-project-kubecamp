@@ -29,9 +29,9 @@ pipeline {
             steps {
                 dir('services/java-catalog'){
                     script {
-                        def dockerfile = 'Dockerfile.test'
-                        testContainer = docker.build("aalleexx98/alex-project-kubecamp-java:testing", "-f $dockerfile .")
-                        testContainer.run()
+                        def dockerfile = '.docker/Dockerfile'
+                        sh "docker build -t java-test-image -f $dockerfile ."
+                        sh "docker run java-test-image ./gradlew test"
                     }
                 }
             }
