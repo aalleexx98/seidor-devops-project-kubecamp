@@ -19,7 +19,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'sonarqube_5.0'
                     withSonarQubeEnv(installationName: 'aroldev sonarqube') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=alex-project-kubecamp-java -Dsonar.sources=./services/java-catalog -Dsonar.exclusions=**/*Test.java -Dsonar.tests=./services/java-catalog -Dsonar.test.inclusions=**/*Test.java"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=alex-project-kubecamp-java -Dsonar.sources=./services/java-catalog -Dsonar.exclusions=**/*Test.java -Dsonar.tests=./services/java-catalog -Dsonar.test.inclusions=**/*Test.java -Dsonar.java.binaries=./services/java-catalog/build/classes/java/main"
                     }
                 }
             }
