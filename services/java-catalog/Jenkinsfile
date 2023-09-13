@@ -26,15 +26,25 @@ pipeline {
         }
 
         stage('Testing') {
-            agent {
-                docker {
-                    image 'gradle:8.2-jdk17'
-                    reuseNode true
+            steps {
+                dir('services/java-catalog'){
+                    script {
+                        def dockerfile = 'Dockerfile.test'
+                        testContainer = docker.build("aalleexx98/alex-project-kubecamp-java:testing", "-f $dockerfile .")
+                        testContainer.run()
+                    }
                 }
             }
-            steps {
-                sh './gradlew test'
-            }
+            // agent {
+            //     docker {
+            //         image 'gradle:8.2-jdk17'
+            //         reuseNode true
+            //     }
+            // }
+            // steps {
+            //     sh './gradlew test'
+            //     //Probar de hacer como el de go
+            // }
         }
     }
 }
