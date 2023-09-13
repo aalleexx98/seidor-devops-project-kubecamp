@@ -28,12 +28,14 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Iniciar el contenedor de prueba
-                    def testContainer = docker.image('golang:1.14.2').run('-d -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock')
-                    // Copiar el código fuente al contenedor de prueba
-                    sh "docker cp . ${testContainer.id}:/go/src/github.com/alex-joaquin/alex-project-kubecamp/services/go-auth"
-                    // Ejecutar los tests
-                    sh "docker exec ${testContainer.id} go test -v ./..."
+                    // Cambia al directorio de tu proyecto Go
+                    dir('./services/go-auth') {
+                        // Instala las dependencias si es necesario
+                        sh 'go mod download'
+
+                        // Ejecuta las pruebas Go
+                        sh 'go test ./...'
+                    }
                 }
             }
         }
