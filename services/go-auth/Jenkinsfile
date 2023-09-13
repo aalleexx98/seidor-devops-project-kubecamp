@@ -27,12 +27,14 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                script {
-                    def dockerfile = './services/go-auth/Dockerfile.test'
-                    sh "docker build -t go-test-image -f $dockerfile ."
+                dir('services/go-auth'){
+                    script {
+                        def dockerfile = './services/go-auth/Dockerfile.test'
+                        sh "docker build -t go-test-image -f $dockerfile ."
 
-                    // Ejecuta el contenedor de prueba
-                    sh "docker run go-test-image"
+                        // Ejecuta el contenedor de prueba
+                        sh "docker run go-test-image"
+                    }
                 }
             }
         }
