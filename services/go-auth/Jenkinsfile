@@ -31,8 +31,14 @@ pipeline {
                     script {
                         def dockerfile = 'Dockerfile.test'
                         testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
-                        
                         testContainer.run()
+
+                        def command = 'go test ./...'
+                        def exitCode = testContainer.inside('-t', command).exitStatus()
+
+                        if (exitCode != 0) {
+                            currentBuild.result = 'FAILED'
+                        }
                     }
                 }
             }
