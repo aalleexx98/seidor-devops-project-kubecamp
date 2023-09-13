@@ -54,7 +54,7 @@ pipeline {
                 dir('services/go-auth'){
                     script {
                         def dockerTag = params.DOCKER_TAG
-                        def dockerfile = 'services/go-auth/Dockerfile'
+                        def dockerfile = 'Dockerfile'
                         sh "docker build -t aalleexx98/alex-project-kubecamp-go:$dockerTag -f $dockerfile ."
                         // Mirar lo del dir.
                     }
