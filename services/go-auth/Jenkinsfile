@@ -29,16 +29,19 @@ pipeline {
             steps {
                 dir('services/go-auth'){
                     script {
+                        // def dockerfile = 'Dockerfile.test'
+                        // sh "docker build -t go-test-image -f $dockerfile ."
+                        
+                        // sh "docker run go-test-image"
+
+                        //TODO: Lo de arriba los test petan y creo que es por el mongo ya que el test singup no funciona, se qeuda esperando
+                        //Y lo de abajo no da error pero me parece raro que no muestre una salida de los test
+
                         def dockerfile = 'Dockerfile.test'
                         testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
-
-                        def testContainer = testImage.run()
-
-                        def exitCode = testContainer.wait()
-                        echo "Salida de los tests: ${testContainer.text}"
-                        
-                        if (exitCode != 0) {
-                            currentBuild.result = 'FAILED'
+                        testContainer.run()
+                        testContainer.inside {
+                            sh "go test -v ./..."
                         }
                     }
                 }
@@ -47,11 +50,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    def dockerTag = params.DOCKER_TAG
-                    def dockerfile = 'services/go-auth/Dockerfile'
-                    sh "docker build -t aalleexx98/alex-project-kubecamp-go:$dockerTag -f $dockerfile ."
-                    // Mirar lo del dir.
+                dir('services/go-auth'){
+                    script {
+                        def dockerTag = params.DOCKER_TAG
+                        def dockerfile = 'services/go-auth/Dockerfile'
+                        sh "docker build -t aalleexx98/alex-project-kubecamp-go:$dockerTag -f $dockerfile ."
+                        // Mirar lo del dir.
+                    }
                 }
             }
         }
