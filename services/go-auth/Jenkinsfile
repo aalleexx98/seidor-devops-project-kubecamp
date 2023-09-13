@@ -82,7 +82,7 @@ pipeline {
     post {
         always {
             script { 
-                testContainer.stop()
+                //testContainer.stop()
             }
         }
     }
