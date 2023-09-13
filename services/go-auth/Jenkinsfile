@@ -29,16 +29,25 @@ pipeline {
             steps {
                 dir('services/go-auth'){
                     script {
-                        def dockerfile = 'Dockerfile.test'
-                        testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
-                        testContainer.run()
+                        // def dockerfile = 'Dockerfile.test'
+                        // testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
+                        // testContainer.run()
+                         // Utiliza Docker Compose para construir e iniciar contenedores
+                        sh "docker-compose -f docker-compose.t.yaml up -d"
 
-                        // def command = 'go test ./...'
-                        // def exitCode = testContainer.inside('-t', command).exitStatus()
+                        // Obtiene el nombre del contenedor Go
+                        def goContainerName = sh(script: "docker-compose -f docker-compose.t.yaml ps -q app-test", returnStdout: true).trim()
 
-                        // if (exitCode != 0) {
-                        //     currentBuild.result = 'FAILED'
-                        // }
+                        // Ejecuta los comandos de prueba dentro del contenedor Go
+                        def command = 'go test ./...'
+                        def exitCode = sh(script: "docker exec -i $goContainerName $command", returnStatus: true)
+
+                        // Detén y elimina los contenedores de Docker Compose
+                        sh "docker-compose -f docker-compose.t.yaml down"
+
+                        if (exitCode != 0) {
+                            currentBuild.result = 'FAILED'
+                        }
                     }
                 }
             }
