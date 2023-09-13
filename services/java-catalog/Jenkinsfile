@@ -24,5 +24,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Testing') {
+            agent {
+                docker {
+                    image 'gradle:8.2.0-jdk17-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh './gradlew test'
+            }
+        }
     }
 }
