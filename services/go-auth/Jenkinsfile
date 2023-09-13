@@ -29,11 +29,17 @@ pipeline {
             steps {
                 dir('services/go-auth'){
                     script {
-                        def dockerfile = './services/go-auth/Dockerfile.test'
-                        sh "docker build -t go-test-image -f $dockerfile ."
+                        def dockerfile = 'Dockerfile.test'
+                        testImage = docker.build("${params.DOCKER_IMAGE}:test", "-f ${dockerfileTest} .")
 
-                        // Ejecuta el contenedor de prueba
-                        sh "docker run go-test-image"
+                        def testContainer = testImage.run()
+
+                        def exitCode = testContainer.wait()
+                        echo "Salida de los tests: ${testContainer.text}"
+                        
+                        if (exitCode != 0) {
+                            currentBuild.result = 'FAILED'
+                        }
                     }
                 }
             }
