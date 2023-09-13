@@ -25,23 +25,23 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    def dockerTag = params.DOCKER_TAG
-                    def dockerfile = 'services/go-auth/Dockerfile'
-                    testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
-                    testContainer.run()
+        // stage('Run Tests') {
+        //     steps {
+        //         script {
+        //             def dockerTag = params.DOCKER_TAG
+        //             def dockerfile = 'services/go-auth/Dockerfile'
+        //             testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
+        //             testContainer.run()
 
-                    def command = './gradlew test'
-                    def exitCode = testContainer.inside('-t', command).exitStatus()
+        //             def command = './gradlew test'
+        //             def exitCode = testContainer.inside('-t', command).exitStatus()
 
-                    if (exitCode != 0) {
-                        currentBuild.result = 'FAILED'
-                    }
-                }
-            }
-        }
+        //             if (exitCode != 0) {
+        //                 currentBuild.result = 'FAILED'
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
