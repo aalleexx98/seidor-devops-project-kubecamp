@@ -29,7 +29,7 @@ pipeline {
         //     steps {
         //         dir('services/java-catalog'){
         //             script {
-        //                 def dockerfile = '.docker/dev.Dockerfile'
+        //                 def dockerfile = '.docker/Dockerfile'
         //                 sh "docker build -t java-test-image -f $dockerfile ."
         //                 sh "docker run java-test-image ./gradlew test"
         //             }
