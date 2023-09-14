@@ -25,16 +25,16 @@ pipeline {
             }
         }
 
-        //stage('Testing') {
-            // steps {
-            //     dir('services/java-catalog'){
-            //         script {
-            //             def dockerfile = '/.docker/Dockerfile'
-            //             sh "docker build -t java-test-image -f $dockerfile ."
-            //             sh "docker run java-test-image ./gradlew test"
-            //         }
-            //     }
-            // }
+        stage('Testing') {
+            steps {
+                dir('services/java-catalog'){
+                    script {
+                        def dockerfile = '/.docker/Dockerfile'
+                        sh "docker build -t java-test-image -f $dockerfile ."
+                        sh "docker run java-test-image ./gradlew test"
+                    }
+                }
+            }
 
             // agent {
             //     docker {
@@ -46,7 +46,7 @@ pipeline {
             //     sh './gradlew test'
             //     //Probar de hacer como el de go
             // }
-        //}
+        }
 
         stage('Build Docker Image') {
             steps {
