@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-go-auth
+spec:
+  replicas: {{ .Values.goAuth.replicaCount }}
+  selector:
+    matchLabels:
+      app: go-auth
+  template:
+    metadata:
+      labels:
+        app: go-auth
+    spec:
+      containers:
+        - name: go-auth
+          image: {{ .Values.goAuth.image.repository }}:{{ .Values.goAuth.image.tag }}
+          ports:
+            - containerPort: {{ .Values.goAuth.port }}
+          env:
+            - name: MONGO_URI
+              value: {{ .Values.goAuth.mongoUri }}
+            - name: SECRET_KEY
+              value: {{ .Values.goAuth.secretKey }}
+            - name: PORT
+              value: {{ .Values.goAuth.port | quote }}
