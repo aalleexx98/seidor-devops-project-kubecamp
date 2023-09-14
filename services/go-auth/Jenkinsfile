@@ -37,9 +37,9 @@ pipeline {
                         //TODO: Lo de arriba los test petan y creo que es por el mongo ya que el test singup no funciona, se qeuda esperando? aunque en local tmb petan.
                         //Y lo de abajo no da error pero me parece raro que no muestre una salida de los test
 
-                        def dockerfile = 'Dockerfile.test'
-                        testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
-                        testContainer.run()
+                        // def dockerfile = 'Dockerfile.test'
+                        // testContainer = docker.build("aalleexx98/alex-project-kubecamp-go:testing", "-f $dockerfile .")
+                        // testContainer.run()
                         // testContainer.inside {
                         //     sh "go test -v ./..."
                         // }
