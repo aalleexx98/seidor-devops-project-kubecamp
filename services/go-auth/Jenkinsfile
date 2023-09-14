@@ -29,10 +29,10 @@ pipeline {
             steps {
                 dir('services/go-auth'){
                     script {
-                        // def dockerfile = 'Dockerfile.test'
-                        // sh "docker build -t go-test-image -f $dockerfile ."
+                        def dockerfile = 'Dockerfile.test'
+                        sh "docker build -t go-test-image -f $dockerfile ."
                         
-                        // sh "docker run go-test-image"
+                        sh "docker run go-test-image"
 
                         //TODO: Lo de arriba los test petan y creo que es por el mongo ya que el test singup no funciona, se qeuda esperando? aunque en local tmb petan.
                         //Y lo de abajo no da error pero me parece raro que no muestre una salida de los test
