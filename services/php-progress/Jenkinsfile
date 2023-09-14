@@ -32,7 +32,7 @@ pipeline {
                     script {
                         def dockerfile = "dev.Dockerfile"
                         sh "docker build -t phpdev -f $dockerfile ."
-                        sh "docker run -it --rm phpdev composer run test"
+                        sh "docker run --rm phpdev composer run test"
                     }
                 }
             }
