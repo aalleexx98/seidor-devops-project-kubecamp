@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'DOCKER_TAG', description: 'Tag de la imagen Docker', defaultValue: 'latest')
+    }
+    environment {
+        DOCKER_USER_CRED = credentials('alex-joaquin-dockerhub')
+    }
+    
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'sonarqube_5.0'
+                    withSonarQubeEnv(installationName: 'aroldev sonarqube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=alex-project-kubecamp-python -Dsonar.sources=./services/python-discuss -Dsonar.inclusions=**/*.py"
+                    }
+                }
+            }
+        }
+
+         stage('Build Docker Image') {
+            steps {
+                dir('services/python-discuss'){
+                    script {
+                        def dockerTag = params.DOCKER_TAG
+                        def dockerfile = 'Dockerfile'
+                        sh "docker build -t aalleexx98/alex-project-kubecamp-python:$dockerTag -f $dockerfile ."
+                    }
+                }
+            }
+        }
+
+        stage('Loggin in docker hub'){
+            steps {
+                sh "docker login -u $DOCKER_USER_CRED_USR -p $DOCKER_USER_CRED_PSW"
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def dockerTag = params.DOCKER_TAG
+                    sh "docker push aalleexx98/alex-project-kubecamp-python:$dockerTag"
+                }
+            }
+        }
+        
+    }
+}
