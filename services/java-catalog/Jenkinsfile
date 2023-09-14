@@ -53,8 +53,8 @@ pipeline {
                 dir('services/java-catalog'){
                     script {
                         def dockerTag = params.DOCKER_TAG
-                        def dockerfile = 'Dockerfile'
-                        sh "docker build -t aalleexx98/alex-project-kubecamp-java:$dockerTag -f .docker/$dockerfile ."
+                        def dockerfile = '.docker/Dockerfile'
+                        sh "docker build -t aalleexx98/alex-project-kubecamp-java:$dockerTag -f $dockerfile ."
                     }
                 }
             }
