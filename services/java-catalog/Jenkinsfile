@@ -26,15 +26,16 @@ pipeline {
         }
 
         stage('Testing') {
-            steps {
-                dir('services/java-catalog/.docker'){
-                    script {
-                        def dockerfile = 'Dockerfile'
-                        sh "docker build -t java-test-image -f $dockerfile ."
-                        sh "docker run java-test-image ./gradlew test"
-                    }
-                }
-            }
+            // steps {
+            //     dir('services/java-catalog/.docker'){
+            //         script {
+            //             def dockerfile = 'Dockerfile'
+            //             sh "docker build -t java-test-image -f $dockerfile ."
+            //             sh "docker run java-test-image ./gradlew test"
+            //         }
+            //     }
+            // }
+
             // agent {
             //     docker {
             //         image 'gradle:8.2-jdk17'
@@ -45,6 +46,33 @@ pipeline {
             //     sh './gradlew test'
             //     //Probar de hacer como el de go
             // }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('services/go-auth'){
+                    script {
+                        def dockerTag = params.DOCKER_TAG
+                        def dockerfile = '.docker/Dockerfile'
+                        sh "docker build -t aalleexx98/alex-project-kubecamp-java:$dockerTag -f $dockerfile ."
+                    }
+                }
+            }
+        }
+
+        stage('Loggin in docker hub'){
+            steps {
+                sh "docker login -u $DOCKER_USER_CRED_USR -p $DOCKER_USER_CRED_PSW"
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def dockerTag = params.DOCKER_TAG
+                    sh "docker push aalleexx98/alex-project-kubecamp-java:$dockerTag"
+                }
+            }
         }
     }
 }
