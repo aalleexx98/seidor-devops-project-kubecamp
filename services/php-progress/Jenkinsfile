@@ -6,12 +6,6 @@ pipeline {
     environment {
         DOCKER_USER_CRED = credentials('alex-joaquin-dockerhub')
     }
-
-    parameters{
-        string(name: 'DOCKER_IMAGE', defaultValue: 'paupajaromondejar/php-progress', description: 'Docker image name')
-        string(name: 'TAG', defaultValue: 'latest', description: 'version name')
-        string(name: 'CREDENTIALS', defaultValue: 'pau.dockerhub', description: 'DockerHub credentials')
-    }
     
 
     stages {
