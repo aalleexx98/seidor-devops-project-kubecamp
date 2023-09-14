@@ -26,20 +26,18 @@ pipeline {
             }
         }
         
-        // stage('Run Tests') {
-        //     steps {
-        //         dir('services/php-progress'){
-        //             script {
-        //                 def dockerfileTest = "Dockerfile.test"
-        //                 // Construye la imagen para las pruebas
-        //                 testApp = docker.build("${params.DOCKER_IMAGE}:test", "-f ${dockerfileTest} .")
-                        
-        //                 // Ejecuta la imagen para las pruebas
-        //                 testApp.run()
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Run Tests') {
+            steps {
+                dir('services/php-progress'){
+                    script {
+                        def dockerfile = "dev.Dockerfile"
+                        sh "docker build -t phpdev -f $dockerfile ."
+                        sh "docker run -it --rm phpdev composer run test"
+                    }
+                }
+            }
+        }
+
          stage('Build Docker Image') {
             steps {
                 dir('services/php-progress'){
